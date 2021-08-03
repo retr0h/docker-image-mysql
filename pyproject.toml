@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "docker-image-mysql"
+version = "0.1.0"
+description = ""
+authors = ["John Dewey <john.dewey@corelight.com>"]
+
+[tool.poetry.dependencies]
+ansible = "*"
+kubernetes = "*"
+molecule = "^3.3.4"
+molecule-docker = "^0.2.4"
+molecule-k3d = "^0.1.0"
+python = "^3.8"
+
+[tool.poetry.dev-dependencies]
+coverage = {extras = ["toml"], version = "*"}
+yamllint = "*"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

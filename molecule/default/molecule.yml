@@ -1,0 +1,13 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: k3d
+platforms:
+  - name: instance
+provisioner:
+  name: ansible
+  env:
+    K8S_AUTH_KUBECONFIG: ~/.kube/config
+verifier:
+  name: ansible

@@ -1,0 +1,33 @@
+image: docker:dind
+
+variables:
+  # NOTE(john.dewey): Use the CI_COMMIT_SHORT_SHA supplied
+  # by the parent.
+  TAG_LOGIC: '(if [ "$${TAG}" == "" ]; then echo "$${CI_COMMIT_SHORT_SHA}"; else echo "$${TAG}"; fi);'
+
+stages:
+  - build-and-push
+
+build-and-push:
+  services:
+    - docker:dind
+  stage: build-and-push
+  script:
+    - TAG=$(eval $TAG_LOGIC)
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+
+    - apk add --update make
+    - make push TAG=$TAG
+  # TODO(john.dewey): Understand why upstream jobs fail to execute
+  # this job with:
+  #   bridge-to-docker-image-python - failed (downstream
+  #   pipeline can not be created, No stages/ jobs for this
+  #   pipeline.)
+  # rules:
+  #   - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+  #     when: always
+  #   - if: '$CI_PIPELINE_SOURCE == "parent_pipeline"'
+  #     when: always
+  #   - if: '$CI_PIPELINE_SOURCE == "trigger"'
+  #     when: always
+  #   - when: never
